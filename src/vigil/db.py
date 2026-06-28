@@ -75,7 +75,8 @@ async def describe_table(
         WHERE table_schema = $1 AND table_name = $2
         ORDER BY ordinal_position
         """,
-        schema, table,
+        schema,
+        table,
     )
 
     primary_key = await pool.fetch(
@@ -85,7 +86,8 @@ async def describe_table(
         JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
         WHERE i.indrelid = ($1 || '.' || $2)::regclass AND i.indisprimary
         """,
-        schema, table,
+        schema,
+        table,
     )
 
     foreign_keys = await pool.fetch(
@@ -105,7 +107,8 @@ async def describe_table(
           AND tc.table_schema = $1
           AND tc.table_name = $2
         """,
-        schema, table,
+        schema,
+        table,
     )
 
     indexes = await pool.fetch(
@@ -114,7 +117,8 @@ async def describe_table(
         FROM pg_indexes
         WHERE schemaname = $1 AND tablename = $2
         """,
-        schema, table,
+        schema,
+        table,
     )
 
     sample = await pool.fetch(

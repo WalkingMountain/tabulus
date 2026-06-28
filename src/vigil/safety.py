@@ -8,12 +8,43 @@ AND the human operator opts in per-statement (future approval flow).
 import re
 
 _FORBIDDEN_KEYWORDS = {
-    "INSERT", "UPDATE", "DELETE", "DROP", "TRUNCATE", "ALTER", "CREATE",
-    "GRANT", "REVOKE", "COMMENT", "REINDEX", "VACUUM", "ANALYZE", "CLUSTER",
-    "COPY", "DO", "CALL", "MERGE", "REPLACE", "RENAME", "REFRESH",
-    "LOCK", "NOTIFY", "LISTEN", "UNLISTEN", "SET", "RESET", "DISCARD",
-    "PREPARE", "EXECUTE", "DEALLOCATE", "BEGIN", "COMMIT", "ROLLBACK",
-    "SAVEPOINT", "RELEASE", "START",
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "DROP",
+    "TRUNCATE",
+    "ALTER",
+    "CREATE",
+    "GRANT",
+    "REVOKE",
+    "COMMENT",
+    "REINDEX",
+    "VACUUM",
+    "ANALYZE",
+    "CLUSTER",
+    "COPY",
+    "DO",
+    "CALL",
+    "MERGE",
+    "REPLACE",
+    "RENAME",
+    "REFRESH",
+    "LOCK",
+    "NOTIFY",
+    "LISTEN",
+    "UNLISTEN",
+    "SET",
+    "RESET",
+    "DISCARD",
+    "PREPARE",
+    "EXECUTE",
+    "DEALLOCATE",
+    "BEGIN",
+    "COMMIT",
+    "ROLLBACK",
+    "SAVEPOINT",
+    "RELEASE",
+    "START",
 }
 
 # Statements that are always allowed in read-only mode
@@ -61,6 +92,4 @@ def assert_read_only(sql: str) -> None:
     upper_tokens = set(re.findall(r"\b[A-Z]+\b", stmt.upper()))
     forbidden_hits = upper_tokens & _FORBIDDEN_KEYWORDS
     if forbidden_hits:
-        raise UnsafeSQLError(
-            f"Forbidden keyword(s) in read-only mode: {sorted(forbidden_hits)}"
-        )
+        raise UnsafeSQLError(f"Forbidden keyword(s) in read-only mode: {sorted(forbidden_hits)}")

@@ -89,7 +89,10 @@ async def list_available_tools() -> list[Tool]:
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "sql": {"type": "string", "description": "A SELECT/WITH/EXPLAIN/SHOW statement."}
+                    "sql": {
+                        "type": "string",
+                        "description": "A SELECT/WITH/EXPLAIN/SHOW statement.",
+                    }
                 },
                 "required": ["sql"],
             },

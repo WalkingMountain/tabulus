@@ -7,10 +7,10 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Config:
     database_url: str
-    max_rows: int            # cap on rows returned by any tool
-    sample_size: int         # rows per describe_schema sample
+    max_rows: int  # cap on rows returned by any tool
+    sample_size: int  # rows per describe_schema sample
     statement_timeout_ms: int
-    allow_writes: bool       # default False — agent gets read-only
+    allow_writes: bool  # default False — agent gets read-only
 
 
 def load() -> Config:

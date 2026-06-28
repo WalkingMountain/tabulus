@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "pivot/**"]
+    tags: ["v*.*.*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12"]
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Format check
+        run: ruff format --check .
+
+      - name: Unit tests
+        run: pytest tests/ -v --tb=short
+
+      - name: Integration smoke (live Postgres)
+        env:
+          DATABASE_URL: postgres://postgres:test@localhost:5432/postgres
+        run: |
+          python -c "
+          import asyncio
+          from vigil.config import load
+          from vigil.db import get_pool, list_tables, close_pool
+          async def main():
+              pool = await get_pool(load())
+              await pool.execute('CREATE TABLE smoke (id int)')
+              tables = await list_tables(pool)
+              assert any(t['name'] == 'smoke' for t in tables), 'smoke table missing'
+              print('Integration OK')
+              await close_pool()
+          asyncio.run(main())
+          "
