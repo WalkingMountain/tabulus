@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "vigil": {
+    "tabulus": {
       "command": ".venv/bin/tabulus",
       "args": [],
       "env": {
