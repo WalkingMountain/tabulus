@@ -123,6 +123,15 @@ Add to `~/.cursor/mcp_servers.json`:
 | `TABULUS_REDACT` | `off` | Set `on` to scrub PII (emails, API keys, JWTs, credit cards, phones, IPs) from `sample_rows`, `safe_select`, and `describe_schema` output before the agent sees it. Recommended for production. |
 | `TABULUS_ALLOW_WRITES` | `false` | Set `true` to disable the write block (NOT recommended) |
 
+## For teams
+
+Tabulus core is free and MIT — and stays that way. If your organization is letting
+AI agents touch real, sensitive databases and you need **audit logs, centrally
+enforced redaction policy, column-level masking, or SSO**, we're exploring a
+self-hosted Team tier (your data never routes through us).
+
+👉 **[Tell us what you'd need →](https://github.com/WalkingMountain/tabulus/issues/1)**
+
 ## Roadmap
 
 - v0.1 — Postgres parity, polished install
