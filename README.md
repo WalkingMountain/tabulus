@@ -31,7 +31,7 @@ What that means in practice:
 ## Install
 
 ```bash
-pip install vigil
+pip install vigilmcp
 ```
 
 ## Run
