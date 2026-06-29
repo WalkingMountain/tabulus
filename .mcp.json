@@ -4,7 +4,7 @@
       "command": ".venv/bin/vigil",
       "args": [],
       "env": {
-        "DATABASE_URL": "${DATABASE_URL}",
+        "DATABASE_URL": "postgres://postgres:dev@localhost:5433/postgres",
         "VIGIL_MAX_ROWS": "100",
         "VIGIL_SAMPLE_SIZE": "3",
         "VIGIL_STATEMENT_TIMEOUT_MS": "5000"
