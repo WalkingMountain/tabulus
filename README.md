@@ -8,6 +8,10 @@ credit cards, SSNs, phones, and IPs **out of every result before the agent ever
 sees them** — so you can point Claude at a production-shaped database without
 piping your customers' PII into someone else's model.
 
+![Tabulus redactor: customer PII and secrets scrubbed before they reach the LLM](demo/tabulus-redactor.svg)
+
+<sub>Same query, redactor off vs on — real output. Record the animated version yourself: [`demo/`](demo/).</sub>
+
 ## The problem
 
 Connecting an AI agent to your database means every row it samples — every

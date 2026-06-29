@@ -16,9 +16,9 @@ psql "$DATABASE_URL" -f demo/seed.sql
 # 3a. just watch it
 bash demo/record.sh
 
-# 3b. or record a GIF
-asciinema rec -c "bash demo/record.sh" tabulus-redactor.cast
-agg tabulus-redactor.cast tabulus-redactor.gif
+# 3b. or record the GIF the README embeds (output path must match)
+asciinema rec -c "bash demo/record.sh" demo/tabulus-redactor.cast
+agg demo/tabulus-redactor.cast demo/tabulus-redactor.gif
 ```
 
 All seed values are fake. Point this at a scratch database only — never prod.

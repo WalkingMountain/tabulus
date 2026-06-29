@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="430" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="13">
+  <rect width="880" height="430" rx="10" fill="#0d1117"/>
+  <text x="24" y="34" fill="#e6edf3" font-size="15" font-weight="700">sample_rows("customers") → what your AI agent receives</text>
+
+  <!-- OFF panel -->
+  <rect x="24" y="54" width="404" height="352" rx="8" fill="#161b22" stroke="#f85149" stroke-width="1.5"/>
+  <text x="40" y="80" fill="#f85149" font-weight="700">TABULUS_REDACT=off</text>
+  <text x="40" y="98" fill="#8b949e" font-size="11">leaks to the LLM ↓</text>
+  <g fill="#c9d1d9">
+    <text x="40" y="128">{</text>
+    <text x="52" y="146">"name": <tspan fill="#a5d6ff">"Jane Acme"</tspan>,</text>
+    <text x="52" y="164">"email": <tspan fill="#ff7b72">"jane@acme.com"</tspan>,</text>
+    <text x="52" y="182">"phone": <tspan fill="#ff7b72">"+1 415 555 0132"</tspan>,</text>
+    <text x="52" y="200">"ssn": <tspan fill="#ff7b72">"123-45-6789"</tspan>,</text>
+    <text x="52" y="218">"credit_card": <tspan fill="#ff7b72">"4242 4242…4242"</tspan>,</text>
+    <text x="52" y="236">"stripe_key": <tspan fill="#ff7b72">"sk_live_4eC39…"</tspan>,</text>
+    <text x="52" y="254">"session_jwt": <tspan fill="#ff7b72">"eyJhbG…3Vg7Qk"</tspan>,</text>
+    <text x="52" y="272">"last_ip": <tspan fill="#ff7b72">"203.0.113.7"</tspan></text>
+    <text x="40" y="290">}</text>
+  </g>
+  <text x="40" y="380" fill="#f85149" font-size="11.5">✗ customer PII + a live-shaped secret shipped to the model</text>
+
+  <!-- arrow -->
+  <text x="436" y="240" fill="#8b949e" font-size="22">→</text>
+
+  <!-- ON panel -->
+  <rect x="452" y="54" width="404" height="352" rx="8" fill="#161b22" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="468" y="80" fill="#3fb950" font-weight="700">TABULUS_REDACT=on</text>
+  <text x="468" y="98" fill="#8b949e" font-size="11">scrubbed before it leaves ↓</text>
+  <g fill="#c9d1d9">
+    <text x="468" y="128">{</text>
+    <text x="480" y="146">"name": <tspan fill="#a5d6ff">"Jane Acme"</tspan>,</text>
+    <text x="480" y="164">"email": <tspan fill="#3fb950">"[REDACTED:email]"</tspan>,</text>
+    <text x="480" y="182">"phone": <tspan fill="#3fb950">"[REDACTED:phone]"</tspan>,</text>
+    <text x="480" y="200">"ssn": <tspan fill="#3fb950">"[REDACTED:ssn]"</tspan>,</text>
+    <text x="480" y="218">"credit_card": <tspan fill="#3fb950">"[REDACTED:credit_card]"</tspan>,</text>
+    <text x="480" y="236">"stripe_key": <tspan fill="#3fb950">"[REDACTED:stripe_key]"</tspan>,</text>
+    <text x="480" y="254">"session_jwt": <tspan fill="#3fb950">"[REDACTED:jwt]"</tspan>,</text>
+    <text x="480" y="272">"last_ip": <tspan fill="#3fb950">"[REDACTED:ipv4]"</tspan></text>
+    <text x="468" y="290">}</text>
+  </g>
+  <text x="468" y="380" fill="#3fb950" font-size="11.5">✓ agent still reasons over the shape — data never left the building</text>
+</svg>
