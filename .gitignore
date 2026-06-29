@@ -18,3 +18,4 @@ dist/
 
 # local-only — not pushed to main
 CLAUDE.md
+.private/
