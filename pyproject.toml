@@ -1,5 +1,5 @@
 [project]
-name = "vigilmcp"
+name = "vigil-dbmcp"
 version = "0.0.1"
 description = "Postgres MCP server — agent-first database workbench"
 authors = [{name = "WalkingMountain"}]
@@ -32,8 +32,8 @@ dev = [
 vigil = "vigil.cli:main"
 
 [project.urls]
-Repository = "https://github.com/WalkingMountain/vigil"
-Issues = "https://github.com/WalkingMountain/vigil/issues"
+Repository = "https://github.com/WalkingMountain/vigilmcp"
+Issues = "https://github.com/WalkingMountain/vigilmcp/issues"
 
 [build-system]
 requires = ["hatchling"]

@@ -29,7 +29,7 @@ def main() -> None:
             "  VIGIL_REDACT              default off — set 'on' to scrub PII from output\n"
             "  VIGIL_ALLOW_WRITES        default false — keep false (read-only)\n"
             "\n"
-            "Repo: https://github.com/WalkingMountain/vigil"
+            "Repo: https://github.com/WalkingMountain/vigilmcp"
         )
         return
 
@@ -59,7 +59,7 @@ def main() -> None:
             f"  - Postgres requires SSL but the URL lacks ?sslmode=require\n"
             f"  - User in DATABASE_URL lacks CONNECT or USAGE privileges\n"
             f"\n"
-            f"File an issue: https://github.com/WalkingMountain/vigil/issues",
+            f"File an issue: https://github.com/WalkingMountain/vigilmcp/issues",
             file=sys.stderr,
         )
         sys.exit(1)
