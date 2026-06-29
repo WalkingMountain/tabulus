@@ -1,34 +1,46 @@
 # Tabulus
 
-**A Postgres MCP server built for AI agents.**
+**Let your AI agent query your real Postgres — without leaking customer data to the LLM.**
 
-Tabulus is the database workbench for the AI-augmented developer. Connect Claude
-Code, Cursor, or any MCP-compatible client to your Postgres database and let the
-agent introspect the schema, sample data, and write safe queries — without
-copy-pasting schemas into chat windows.
+Tabulus is a Postgres MCP server that sits between your AI agent (Claude Code,
+Cursor, any MCP client) and your database. It scrubs emails, API keys, JWTs,
+credit cards, SSNs, phones, and IPs **out of every result before the agent ever
+sees them** — so you can point Claude at a production-shaped database without
+piping your customers' PII into someone else's model.
 
-## Why
+## The problem
 
-Every modern dev workflow now includes an AI agent. Every DB GUI was designed
-before that was true. Tabulus flips the model: **the agent is a first-class
-user, not a sidebar feature.**
+Connecting an AI agent to your database means every row it samples — every
+customer email, every Stripe key sitting in a config table, every JWT in a
+sessions row — gets shipped into the LLM's context window. To Anthropic. To
+OpenAI. To wherever the model runs. Most DB MCP servers solve "can the agent
+drop my tables." **Tabulus solves what leaves the building.**
 
-What that means in practice:
+```
+Without redaction:   {"email": "jane@acme.com",  "api_key": "sk_live_4eC39Hq..."}
+With Tabulus:        {"email": "[REDACTED:email]", "api_key": "[REDACTED:stripe_key]"}
+```
 
-- Schema introspection optimized for LLM context windows (compact JSON, foreign
-  keys flattened, sample rows inline).
-- Read-only by default — `INSERT`/`UPDATE`/`DELETE`/`DDL` are rejected at the
-  gateway. The agent can't drop your tables.
-- `EXPLAIN` exposed as a tool so the agent can reason about query plans before
-  proposing optimizations.
-- Statement timeout + row cap enforced server-side. No agent can DOS your
-  database by accident.
-- Opt-in PII redactor (`TABULUS_REDACT=on`) scrubs emails, API keys, JWTs,
-  credit cards, phones, and IPs from tool output before the agent sees them.
+Turn it on with `TABULUS_REDACT=on`. The sentinel keeps enough structure for the
+agent to reason (`"Stripe call failed with [REDACTED:stripe_key]"`) without ever
+seeing the secret.
+
+## Also in the box
+
+- **PII/secret redactor** — emails, API keys (Anthropic/OpenAI/Stripe/GitHub/AWS/
+  Slack/Google), JWTs, bearer tokens, credit cards, SSNs, phones, IPv4/IPv6.
+  Conservative by design: false positives are cheap, false negatives leak.
+- **Read-only, enforced three ways** — keyword gate + Postgres read-only
+  transaction + row cap. The agent can't drop your tables.
+- **Schema introspection tuned for context windows** — compact JSON, foreign keys
+  flattened, sample rows inline. Fits a 50-table schema in one prompt.
+- **`EXPLAIN` as a tool** — the agent reasons about query plans before proposing
+  optimizations.
+- **Statement timeout + row cap** server-side. No accidental DOS.
 
 ## Status
 
-**v0.0.1 — alpha.** Postgres only. Stdio MCP transport only. No GUI yet.
+**v0.0.3 — alpha.** Postgres only. Stdio MCP transport only. No GUI yet.
 
 ## Install
 
