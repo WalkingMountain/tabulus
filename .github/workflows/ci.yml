@@ -56,6 +56,12 @@ jobs:
       - name: Unit tests
         run: pytest tests/ -v --tb=short
 
+      - name: Seed test table (DDL needs a separate non-readonly connection)
+        env:
+          PGPASSWORD: test
+        run: |
+          psql -h localhost -U postgres -d postgres -c "CREATE TABLE smoke (id int);"
+
       - name: Integration smoke (live Postgres)
         env:
           DATABASE_URL: postgres://postgres:test@localhost:5432/postgres
@@ -66,10 +72,9 @@ jobs:
           from vigil.db import get_pool, list_tables, close_pool
           async def main():
               pool = await get_pool(load())
-              await pool.execute('CREATE TABLE smoke (id int)')
               tables = await list_tables(pool)
               assert any(t['name'] == 'smoke' for t in tables), 'smoke table missing'
-              print('Integration OK')
+              print('Integration OK — found smoke table')
               await close_pool()
           asyncio.run(main())
           "
