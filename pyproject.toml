@@ -1,6 +1,6 @@
 [project]
 name = "tabulus"
-version = "0.0.1"
+version = "0.0.2"
 description = "Postgres MCP server — agent-first database workbench"
 authors = [{name = "WalkingMountain"}]
 license = {text = "MIT"}
@@ -29,11 +29,11 @@ dev = [
 ]
 
 [project.scripts]
-vigil = "vigil.cli:main"
+tabulus = "tabulus.cli:main"
 
 [project.urls]
-Repository = "https://github.com/WalkingMountain/vigilmcp"
-Issues = "https://github.com/WalkingMountain/vigilmcp/issues"
+Repository = "https://github.com/WalkingMountain/tabulus"
+Issues = "https://github.com/WalkingMountain/tabulus/issues"
 
 [build-system]
 requires = ["hatchling"]

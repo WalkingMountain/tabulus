@@ -1,7 +1,7 @@
 """SQL safety — read-only enforcement.
 
 Rejects any statement that could mutate data or schema. Default mode for the
-agent: SELECT + EXPLAIN only. Writes only enabled when VIGIL_ALLOW_WRITES=true
+agent: SELECT + EXPLAIN only. Writes only enabled when TABULUS_ALLOW_WRITES=true
 AND the human operator opts in per-statement (future approval flow).
 """
 

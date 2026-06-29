@@ -2,7 +2,7 @@
 
 import pytest
 
-from vigil.safety import UnsafeSQLError, assert_read_only, normalize
+from tabulus.safety import UnsafeSQLError, assert_read_only, normalize
 
 
 # ── Allowed: every safe lead keyword ────────────────────────────────────────

@@ -1,13 +1,13 @@
 {
   "mcpServers": {
     "vigil": {
-      "command": ".venv/bin/vigil",
+      "command": ".venv/bin/tabulus",
       "args": [],
       "env": {
         "DATABASE_URL": "postgres://postgres:dev@localhost:5433/postgres",
-        "VIGIL_MAX_ROWS": "100",
-        "VIGIL_SAMPLE_SIZE": "3",
-        "VIGIL_STATEMENT_TIMEOUT_MS": "5000"
+        "TABULUS_MAX_ROWS": "100",
+        "TABULUS_SAMPLE_SIZE": "3",
+        "TABULUS_STATEMENT_TIMEOUT_MS": "5000"
       }
     }
   }

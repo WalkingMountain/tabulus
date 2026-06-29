@@ -18,8 +18,8 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 
-from vigil.config import load
-from vigil.db import (
+from tabulus.config import load
+from tabulus.db import (
     close_pool,
     describe_table,
     explain,
@@ -28,10 +28,10 @@ from vigil.db import (
     safe_select,
     sample_rows,
 )
-from vigil.safety import UnsafeSQLError, assert_read_only
+from tabulus.safety import UnsafeSQLError, assert_read_only
 
 
-server = Server("vigil")
+server = Server("tabulus")
 
 
 @server.list_tools()

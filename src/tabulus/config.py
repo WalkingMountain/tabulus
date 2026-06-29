@@ -22,8 +22,8 @@ def load() -> Config:
         )
     return Config(
         database_url=url,
-        max_rows=int(os.environ.get("VIGIL_MAX_ROWS", "100")),
-        sample_size=int(os.environ.get("VIGIL_SAMPLE_SIZE", "3")),
-        statement_timeout_ms=int(os.environ.get("VIGIL_STATEMENT_TIMEOUT_MS", "5000")),
-        allow_writes=os.environ.get("VIGIL_ALLOW_WRITES", "false").lower() == "true",
+        max_rows=int(os.environ.get("TABULUS_MAX_ROWS", "100")),
+        sample_size=int(os.environ.get("TABULUS_SAMPLE_SIZE", "3")),
+        statement_timeout_ms=int(os.environ.get("TABULUS_STATEMENT_TIMEOUT_MS", "5000")),
+        allow_writes=os.environ.get("TABULUS_ALLOW_WRITES", "false").lower() == "true",
     )

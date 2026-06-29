@@ -68,8 +68,8 @@ jobs:
         run: |
           python -c "
           import asyncio
-          from vigil.config import load
-          from vigil.db import get_pool, list_tables, close_pool
+          from tabulus.config import load
+          from tabulus.db import get_pool, list_tables, close_pool
           async def main():
               pool = await get_pool(load())
               tables = await list_tables(pool)

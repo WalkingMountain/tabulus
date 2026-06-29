@@ -11,7 +11,7 @@ leaking the value.
 
 Conservative philosophy: false positives are cheap, false negatives kill.
 
-Off by default — set VIGIL_REDACT=on to enable.
+Off by default — set TABULUS_REDACT=on to enable.
 """
 
 from __future__ import annotations
@@ -65,7 +65,7 @@ _PATTERNS: list[tuple[str, re.Pattern[str]]] = [
 
 
 def is_enabled() -> bool:
-    return os.environ.get("VIGIL_REDACT", "off").lower() in ("on", "true", "1", "yes")
+    return os.environ.get("TABULUS_REDACT", "off").lower() in ("on", "true", "1", "yes")
 
 
 def redact_string(s: str) -> str:
@@ -92,5 +92,5 @@ def redact_value(v: Any) -> Any:
 
 
 def maybe_redact(v: Any) -> Any:
-    """No-op when VIGIL_REDACT is off, redact otherwise."""
+    """No-op when TABULUS_REDACT is off, redact otherwise."""
     return redact_value(v) if is_enabled() else v

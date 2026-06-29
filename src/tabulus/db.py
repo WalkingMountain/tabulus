@@ -7,8 +7,8 @@ flattened. Goal is to fit a 50-table schema into one prompt without truncation.
 import asyncpg
 from typing import Any
 
-from vigil.config import Config
-from vigil.redactor import maybe_redact
+from tabulus.config import Config
+from tabulus.redactor import maybe_redact
 
 
 _pool: asyncpg.Pool | None = None
@@ -169,7 +169,7 @@ async def safe_select(
     max_rows: int,
 ) -> dict[str, Any]:
     # Wrap with LIMIT enforcement (subquery prevents user-supplied LIMIT bypass)
-    wrapped = f"SELECT * FROM ({sql}) _vigil_q LIMIT {int(max_rows)}"
+    wrapped = f"SELECT * FROM ({sql}) _tabulus_q LIMIT {int(max_rows)}"
     rows = await pool.fetch(wrapped)
     return {
         "row_count": len(rows),

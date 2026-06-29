@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from vigil.redactor import (
+from tabulus.redactor import (
     is_enabled,
     maybe_redact,
     redact_string,
@@ -121,18 +121,18 @@ def test_disabled_by_default():
 
 
 def test_enabled_via_env():
-    with patch.dict(os.environ, {"VIGIL_REDACT": "on"}):
+    with patch.dict(os.environ, {"TABULUS_REDACT": "on"}):
         assert is_enabled() is True
         assert maybe_redact("foo@bar.com") == "[REDACTED:email]"
 
 
 def test_enabled_alt_values():
     for val in ("on", "ON", "true", "True", "1", "yes"):
-        with patch.dict(os.environ, {"VIGIL_REDACT": val}):
-            assert is_enabled() is True, f"VIGIL_REDACT={val!r} should enable"
+        with patch.dict(os.environ, {"TABULUS_REDACT": val}):
+            assert is_enabled() is True, f"TABULUS_REDACT={val!r} should enable"
 
 
 def test_disabled_alt_values():
     for val in ("off", "false", "0", "no", "", "anything-else"):
-        with patch.dict(os.environ, {"VIGIL_REDACT": val}):
-            assert is_enabled() is False, f"VIGIL_REDACT={val!r} should NOT enable"
+        with patch.dict(os.environ, {"TABULUS_REDACT": val}):
+            assert is_enabled() is False, f"TABULUS_REDACT={val!r} should NOT enable"
