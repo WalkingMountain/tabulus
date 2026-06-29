@@ -41,15 +41,44 @@ export DATABASE_URL=postgres://user:pass@host:5432/dbname
 vigil
 ```
 
-Then point your MCP client at the `vigil` command. Example for Claude Code:
+Then point your MCP client at the `vigil` command.
+
+### Claude Code (project-level)
+
+Create `.mcp.json` in your project root:
 
 ```jsonc
-// ~/.claude/mcp_servers.json
 {
-  "vigil": {
-    "command": "vigil",
-    "env": {
-      "DATABASE_URL": "postgres://user:pass@host:5432/dbname"
+  "mcpServers": {
+    "vigil": {
+      "command": "vigil",
+      "args": [],
+      "env": {
+        "DATABASE_URL": "postgres://user:pass@host:5432/dbname"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Code in that directory and approve the trust prompt.
+
+### Claude Code (user-level via CLI)
+
+```bash
+claude mcp add vigil "$(which vigil)" --env DATABASE_URL=postgres://user:pass@host:5432/dbname
+```
+
+### Cursor
+
+Add to `~/.cursor/mcp_servers.json`:
+
+```jsonc
+{
+  "mcpServers": {
+    "vigil": {
+      "command": "vigil",
+      "env": { "DATABASE_URL": "postgres://user:pass@host:5432/dbname" }
     }
   }
 }
@@ -73,6 +102,7 @@ Then point your MCP client at the `vigil` command. Example for Claude Code:
 | `VIGIL_MAX_ROWS` | `100` | Hard cap on rows returned by any tool |
 | `VIGIL_SAMPLE_SIZE` | `3` | Sample rows included in `describe_schema` |
 | `VIGIL_STATEMENT_TIMEOUT_MS` | `5000` | Server-side query timeout |
+| `VIGIL_REDACT` | `off` | Set `on` to scrub PII (emails, API keys, JWTs, credit cards, phones, IPs) from `sample_rows`, `safe_select`, and `describe_schema` output before the agent sees it. Recommended for production. |
 | `VIGIL_ALLOW_WRITES` | `false` | Set `true` to disable the write block (NOT recommended) |
 
 ## Roadmap

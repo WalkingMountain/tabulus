@@ -8,6 +8,7 @@ import asyncpg
 from typing import Any
 
 from vigil.config import Config
+from vigil.redactor import maybe_redact
 
 
 _pool: asyncpg.Pool | None = None
@@ -37,6 +38,8 @@ async def close_pool() -> None:
 
 
 async def list_tables(pool: asyncpg.Pool, schema: str | None = None) -> list[dict[str, Any]]:
+    """List tables. For tables Postgres hasn't ANALYZEd yet (reltuples < 0),
+    fall back to a live COUNT(*) so the agent never sees `-1` row counts."""
     sql = """
         SELECT
             n.nspname     AS schema,
@@ -52,7 +55,18 @@ async def list_tables(pool: asyncpg.Pool, schema: str | None = None) -> list[dic
         ORDER BY n.nspname, c.relname
     """
     rows = await pool.fetch(sql, schema)
-    return [dict(r) for r in rows]
+    result = [dict(r) for r in rows]
+    for row in result:
+        if row["row_estimate"] is None or row["row_estimate"] < 0:
+            try:
+                count = await pool.fetchval(
+                    f'SELECT COUNT(*) FROM "{row["schema"]}"."{row["name"]}"'
+                )
+                row["row_estimate"] = int(count)
+                row["row_estimate_exact"] = True
+            except Exception:
+                row["row_estimate"] = None
+    return result
 
 
 async def describe_table(
@@ -132,7 +146,7 @@ async def describe_table(
         "primary_key": [r["column"] for r in primary_key],
         "foreign_keys": [dict(f) for f in foreign_keys],
         "indexes": [dict(i) for i in indexes],
-        "sample_rows": [dict(s) for s in sample],
+        "sample_rows": maybe_redact([dict(s) for s in sample]),
     }
 
 
@@ -146,7 +160,7 @@ async def sample_rows(
         f'SELECT * FROM "{schema}"."{table}" ORDER BY random() LIMIT $1',
         limit,
     )
-    return [dict(r) for r in rows]
+    return maybe_redact([dict(r) for r in rows])
 
 
 async def safe_select(
@@ -159,7 +173,7 @@ async def safe_select(
     rows = await pool.fetch(wrapped)
     return {
         "row_count": len(rows),
-        "rows": [dict(r) for r in rows],
+        "rows": maybe_redact([dict(r) for r in rows]),
         "truncated": len(rows) == max_rows,
     }
 
