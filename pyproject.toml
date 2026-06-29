@@ -1,5 +1,5 @@
 [project]
-name = "vigil-dbmcp"
+name = "tabulus"
 version = "0.0.1"
 description = "Postgres MCP server — agent-first database workbench"
 authors = [{name = "WalkingMountain"}]
