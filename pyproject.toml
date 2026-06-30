@@ -1,6 +1,6 @@
 [project]
 name = "tabulus"
-version = "0.0.3"
+version = "0.0.4"
 description = "Postgres MCP server — agent-first database workbench"
 authors = [{name = "WalkingMountain"}]
 license = {text = "MIT"}

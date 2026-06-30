@@ -31,12 +31,24 @@ from tabulus.redactor import (
         ("AKIAIOSFODNN7EXAMPLE", "aws_access_key"),
         ("AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI", "google_api_key"),
         ("Authorization: Bearer abcdef0123456789abcdef0123456789", "bearer_token"),
+        ("Authorization: Token a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "bearer_token"),
         ("ssn 123-45-6789", "ssn"),
         ("Customer foo@example.com", "email"),
         ("call +1 415-555-1234", "phone"),
         ("at 192.168.1.42", "ipv4"),
         ("addr ::1 down", "ipv6"),
         ("card 4111 1111 1111 1111", "credit_card"),
+        # ── regression: adversarial false-negatives found in audit ──────────
+        (
+            "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA\n-----END RSA PRIVATE KEY-----",
+            "private_key",
+        ),
+        ("ya29.a0AfH6SMBx7kJq_longtokenvaluehere1234567890abcdef", "google_oauth"),
+        ("aws_secret_access_key=wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY", "secret"),
+        ("api_key: 9f8e7d6c5b4a39281706f5e4d3c2b1a0", "secret"),
+        ("client_secret='abcdef123456ghijkl'", "secret"),
+        ("call +91 98765 43210", "phone"),  # international, 5-5 grouping
+        ("ring (415) 555-0132 now", "phone"),  # US parens form
     ],
 )
 def test_pattern_redacted(payload, kind):
@@ -90,6 +102,40 @@ def test_list_of_rows():
     assert out[0]["email"] == "[REDACTED:email]"
     assert out[1]["email"] == "[REDACTED:email]"
     assert out[0]["amount"] == 100
+
+
+def test_secret_column_value_masked():
+    """A value in a secret-named column is masked regardless of its content —
+    a bare password has no in-text signal, so we key off the column name."""
+    inp = {
+        "id": 7,
+        "name": "Jane",
+        "db_password": "hunter2supersecret",
+        "user_api_key": "plainlookingvalue123",
+        "oauth_token": "nostructurehere",
+        "city": "Berlin",
+    }
+    out = redact_value(inp)
+    assert out["db_password"] == "[REDACTED:secret]"
+    assert out["user_api_key"] == "[REDACTED:secret]"
+    assert out["oauth_token"] == "[REDACTED:secret]"
+    # Non-secret columns untouched
+    assert out["name"] == "Jane"
+    assert out["city"] == "Berlin"
+    assert out["id"] == 7
+
+
+def test_no_false_positive_number_runs():
+    """Bare digit runs and UUIDs must NOT be mistaken for phone numbers."""
+    assert redact_string("years 2020 2021 2022 were busy") == "years 2020 2021 2022 were busy"
+    uuid = "550e8400-e29b-41d4-a716-446655440000"
+    assert redact_string(uuid) == uuid
+
+
+def test_benign_keyvalue_preserved():
+    """key=value where the key isn't secret-y stays intact (no over-redaction)."""
+    assert redact_string("monkey=banana12345") == "monkey=banana12345"
+    assert redact_string("status=active") == "status=active"
 
 
 def test_non_string_passthrough():

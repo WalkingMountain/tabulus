@@ -32,8 +32,10 @@ seeing the secret.
 ## Also in the box
 
 - **PII/secret redactor** — emails, API keys (Anthropic/OpenAI/Stripe/GitHub/AWS/
-  Slack/Google), JWTs, bearer tokens, credit cards, SSNs, phones, IPv4/IPv6.
-  Conservative by design: false positives are cheap, false negatives leak.
+  Slack/Google), OAuth + bearer tokens, JWTs, PEM private keys, credit cards, SSNs,
+  international + US phones, IPv4/IPv6 — plus `key=value` secrets and any value in a
+  secret-named column (`password`, `api_key`, …). Conservative by design: false
+  positives are cheap, false negatives leak.
 - **Read-only, enforced three ways** — keyword gate + Postgres read-only
   transaction + row cap. The agent can't drop your tables.
 - **Schema introspection tuned for context windows** — compact JSON, foreign keys
@@ -44,7 +46,7 @@ seeing the secret.
 
 ## Status
 
-**v0.0.3 — alpha.** Postgres only. Stdio MCP transport only. No GUI yet.
+**v0.0.4 — alpha.** Postgres only. Stdio MCP transport only. No GUI yet.
 
 ## Install
 
