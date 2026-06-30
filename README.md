@@ -125,6 +125,25 @@ Add to `~/.cursor/mcp_servers.json`:
 | `TABULUS_REDACT` | `off` | Set `on` to scrub PII (emails, API keys, JWTs, credit cards, phones, IPs) from `sample_rows`, `safe_select`, and `describe_schema` output before the agent sees it. Recommended for production. |
 | `TABULUS_ALLOW_WRITES` | `false` | Set `true` to disable the write block (NOT recommended) |
 
+## Troubleshooting
+
+Tabulus validates `DATABASE_URL` is set at startup, but only connects on the first
+tool call — so connection problems surface as an error in your MCP client the first
+time the agent uses a tool, not when the server boots.
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `tabulus: DATABASE_URL is required` | env var not passed to the server | Set `DATABASE_URL` in your `.mcp.json` / client `env` block, not just your shell |
+| `Error: OSError: ... Connect call failed` (connection refused) | wrong host/port, or Postgres isn't running | Check host\:port; confirm `pg_isready -h <host> -p <port>` |
+| `Error: ... SSL ... required` | managed Postgres (Supabase, Neon, RDS) requires TLS | Append `?sslmode=require` to the URL |
+| `Error: ... password authentication failed` | wrong user/password | Re-check credentials in the URL; URL-encode special chars in the password |
+| `Error: ... database "x" does not exist` | wrong db name in the URL path | Fix the `/dbname` segment |
+| `Error: ... permission denied for ...` | role lacks `CONNECT`/`USAGE`/`SELECT` | Grant read access, or connect as a role that has it |
+| Writes rejected (`Rejected by safety policy`) | working as designed — read-only | This is the point. Set `TABULUS_ALLOW_WRITES=true` only if you truly mean it |
+
+Special characters in the password (`@ : / ?`) must be percent-encoded — e.g. `p@ss`
+becomes `p%40ss`.
+
 ## For teams
 
 Tabulus core is free and MIT — and stays that way. If your organization is letting
