@@ -1,0 +1,51 @@
+name: Bug report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected vs. what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. DATABASE_URL=...
+        2. Call tool ... with ...
+        3. See error ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Tabulus version
+      description: Output of `tabulus --version`
+      placeholder: tabulus 0.0.4
+    validations:
+      required: true
+  - type: dropdown
+    id: client
+    attributes:
+      label: MCP client
+      options:
+        - Claude Code
+        - Cursor
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: postgres
+    attributes:
+      label: Postgres version / host
+      placeholder: "Postgres 16 on Supabase / RDS / local"
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Confirm
+      options:
+        - label: I have removed real credentials, connection strings, and customer data from this report
+          required: true

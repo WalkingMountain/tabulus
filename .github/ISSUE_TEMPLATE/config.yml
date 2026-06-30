@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💼 Tabulus for teams (audit, policy, SSO)
+    url: https://github.com/WalkingMountain/tabulus/issues/1
+    about: Need centralized redaction policy, audit logs, or SSO? Tell us what you'd need.
+  - name: 🔒 Report a security vulnerability privately
+    url: https://github.com/WalkingMountain/tabulus/security/advisories/new
+    about: Please disclose security issues here, not in a public issue.

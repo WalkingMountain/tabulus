@@ -1,0 +1,29 @@
+name: Redactor false-negative
+description: A secret or PII value reached tool output with TABULUS_REDACT=on
+labels: ["redactor", "security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The redactor's job is to never leak. If something slipped through, we
+        want to fix it. **Do not paste a real secret** — use a synthetic value
+        with the same shape.
+  - type: input
+    id: kind
+    attributes:
+      label: What kind of value leaked?
+      placeholder: "e.g. an IBAN, a non-US national ID, a base64 API key"
+    validations:
+      required: true
+  - type: input
+    id: sample
+    attributes:
+      label: Synthetic example (same shape, fake value)
+      placeholder: "GB29 NWBK 6016 1331 9268 19"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Where it appeared
+      description: Which tool, and the column/field name if relevant.

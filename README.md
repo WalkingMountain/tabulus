@@ -161,6 +161,12 @@ self-hosted Team tier (your data never routes through us).
 - v0.x — Tauri desktop GUI shell on top of the same core
 - v1.0 — Stable, cross-platform, multi-DB
 
+## Project
+
+- [CHANGELOG](./CHANGELOG.md) — what changed across releases
+- [SECURITY](./SECURITY.md) — read-only guarantees + what the redactor does and doesn't catch
+- [CONTRIBUTING](./CONTRIBUTING.md) — dev setup and conventions
+
 ## License
 
 MIT. See [LICENSE](./LICENSE).
