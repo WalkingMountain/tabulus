@@ -8,9 +8,9 @@ credit cards, SSNs, phones, and IPs **out of every result before the agent ever
 sees them** — so you can point Claude at a production-shaped database without
 piping your customers' PII into someone else's model.
 
-![Tabulus redactor: customer PII and secrets scrubbed before they reach the LLM](demo/tabulus-redactor.svg)
+![Tabulus redactor: customer PII and secrets scrubbed before they reach the LLM](demo/tabulus-redactor.gif)
 
-<sub>Same query, redactor off vs on — real output. Record the animated version yourself: [`demo/`](demo/).</sub>
+<sub>Same query, redactor off vs on — real output from the live redactor. Reproduce it: [`demo/`](demo/).</sub>
 
 ## The problem
 
